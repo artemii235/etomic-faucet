@@ -41,7 +41,6 @@ async function faucet(req, res) {
   }
 
   const toSend = balance.times(3).div(4).div(new BN(10).pow(18)).precision(8);
-  console.log(toSend);
 
   let txIds = [];
   try {
@@ -51,7 +50,7 @@ async function faucet(req, res) {
     res.json({ txIds });
   } catch (e) {
     console.log(e);
-    res.status(500).json({ error: 'Error occured' });
+    res.status(500).json({ error: 'Error occurred' });
   }
 }
 
