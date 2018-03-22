@@ -1,0 +1,22 @@
+version: '2'
+services:
+  workspace:
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    image: artempikulin/node-web3js:latest
+    tty: true
+    ports:
+      - 8000:3000
+    env_file:
+      - .env
+    links:
+      - etomicd
+    command: node src/app.js
+  etomicd:
+    image: artempikulin/komodod-etomic
+    ports:
+      - 10271
+    volumes:
+      - ~/.zcash-params:/root/.zcash-params
+      - ~/.komodo:/root/.komodo
