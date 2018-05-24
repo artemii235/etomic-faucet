@@ -40,7 +40,7 @@ async function faucet(req, res) {
     balance = new BN(await web3.eth.getBalance(req.body.ethAddress));
   }
 
-  const toSend = balance.times(3).div(4).div(new BN(10).pow(18)).precision(8);
+  const toSend = balance.times(3).div(4).div(new BN(10).pow(18)).toFixed(8);
 
   let txIds = [];
   try {
