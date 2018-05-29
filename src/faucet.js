@@ -28,26 +28,31 @@ function sendEtomicToAddress(address, amount) {
 
 async function faucet(req, res) {
   let balance;
-  if (req.body.tokenAddress) {
-    const contract = new web3.eth.Contract(config.erc20Abi, req.body.tokenAddress);
-    balance = new BN(await contract.methods.balanceOf(req.body.ethAddress).call());
-    const decimals = await contract.methods.decimals().call();
-    if (decimals < 18) {
-      const multiply = new BN(10).pow(18 - decimals);
-      balance = balance.times(multiply);
-    }
-  } else {
-    balance = new BN(await web3.eth.getBalance(req.body.ethAddress));
-  }
-
-  const toSend = balance.times(3).div(4).div(new BN(10).pow(18)).toFixed(8);
-
-  let txIds = [];
   try {
-    for (let i = 0; i<3; i++) {
-      txIds.push((await sendEtomicToAddress(req.body.etomicAddress, toSend)).result);
+    if (req.body.tokenAddress) {
+      const contract = new web3.eth.Contract(config.erc20Abi, req.body.tokenAddress);
+      balance = new BN(await contract.methods.balanceOf(req.body.ethAddress).call());
+      const decimals = await contract.methods.decimals().call();
+      if (decimals < 18) {
+        const multiply = new BN(10).pow(18 - decimals);
+        balance = balance.times(multiply);
+      }
+    } else {
+      balance = new BN(await web3.eth.getBalance(req.body.ethAddress));
     }
-    res.json({ txIds });
+
+    const toSend = balance.times(3).div(4).div(new BN(10).pow(18)).toFixed(8);
+
+    let txIds = [];
+
+    if (toSend > 0) {
+      for (let i = 0; i < 3; i++) {
+        txIds.push((await sendEtomicToAddress(req.body.etomicAddress, toSend)).result);
+      }
+      res.json({result: txIds});
+    } else {
+      res.json({result: "ETH/ERC20 balance is zero, ETOMIC is not required"});
+    }
   } catch (e) {
     console.log(e);
     res.status(500).json({ error: 'Error occurred' });
