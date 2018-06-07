@@ -65,9 +65,10 @@ async function faucet(req, res) {
     const requiredEtomic = toSend - (etomicBalanceObject.confirmed + etomicBalanceObject.unconfirmed) / 100000000;
 
     let txIds = [];
-    if (requiredEtomic > 0) {
+    let etomicPart = (requiredEtomic / 3).toFixed(8);
+    if (etomicPart > 0) {
       for (let i = 0; i < 3; i++) {
-        txIds.push((await sendEtomicToAddress(req.body.etomicAddress, (requiredEtomic / 3).toFixed(8))).result);
+        txIds.push((await sendEtomicToAddress(req.body.etomicAddress, etomicPart)).result);
       }
       res.json({result: txIds});
     } else {
