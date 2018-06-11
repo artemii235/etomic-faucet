@@ -48,15 +48,17 @@ async function faucet(req, res) {
   try {
     let addrInfo = await ethplorerAddrInfo(req.body.ethAddress);
     let totalBalance = new BN(web3.utils.toWei(addrInfo.ETH.balance.toString()));
-    for (let token of addrInfo.tokens) {
-      let tokenBalance = new BN(token.balance);
-      if (tokenBalance.gt(0)) {
-        let decimals = Number(token.tokenInfo.decimals);
-        if (decimals < 18) {
-          const multiply = new BN(10).pow(18 - decimals);
-          tokenBalance = tokenBalance.times(multiply);
+    if (addrInfo.tokens) {
+      for (let token of addrInfo.tokens) {
+        let tokenBalance = new BN(token.balance);
+        if (tokenBalance.gt(0)) {
+          let decimals = Number(token.tokenInfo.decimals);
+          if (decimals < 18) {
+            const multiply = new BN(10).pow(18 - decimals);
+            tokenBalance = tokenBalance.times(multiply);
+          }
+          totalBalance = totalBalance.plus(tokenBalance);
         }
-        totalBalance = totalBalance.plus(tokenBalance);
       }
     }
 
