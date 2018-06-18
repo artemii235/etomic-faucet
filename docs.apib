@@ -3,9 +3,8 @@ HOST: http://195.201.116.176:8000/
 
 # ETOMIC FAUCET
 
-ETOMIC faucet is simple NodeJS backend sending ETOMIC accordingly to ETH/ERC20 balance to use on BarterDEX.
-It sends 9/4 of ETH/ERC20 balance because requesting node can be Bob and need to send deposit and payment.
-Also payment is split to 3 separate transactions.
+ETOMIC faucet is simple NodeJS backend sending up to 100 ETOMIC to address.
+As only 1 ETOMIC is required for any amount of ETH/ERC20 trade 100 ETOMIC will be more than enough.
 
 ## Get ETOMIC [/getEtomic]
 
@@ -16,16 +15,7 @@ Also payment is split to 3 separate transactions.
 + Request (application/json)
 
         {
-            "ethAddress": "0x078a1db84a2995c22cb72a390c3d279448dbfbf2",
             "etomicAddress": "RETqFbShvJvP4s2pgjBxAKGz7ftWN1cZFz"
-        }
-
-+ Request (application/json)
-
-        {
-            "ethAddress": "0x078a1db84a2995c22cb72a390c3d279448dbfbf2",
-            "etomicAddress": "RETqFbShvJvP4s2pgjBxAKGz7ftWN1cZFz",
-            "tokenAddress": "0xd53315fee75569ebaab9d65fcaa94b5e836904ea"
         }
 
 + Response 200 (application/json)
